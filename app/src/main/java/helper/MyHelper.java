@@ -12,12 +12,12 @@ import java.util.List;
 public class MyHelper extends SQLiteOpenHelper {
     private static final String databasename = "DictionaryDB";
     private static final int dbVersion = 1;
-    private  static final String tblWord = "tblWord";
-    private  static final String WordID = "WordID";
-    private  static final String Word = "Word";
-    private  static final String Meaning = "Meaning";
+    private static final String tblWord = "tblWord";
+    private static final String WordID = "WordID";
+    private static final String Word = "Word";
+    private static final String Meaning = "Meaning";
 
-    public MyHelper(Context context){
+    public MyHelper(Context context) {
         super(context, databasename, null, dbVersion);
     }
 
@@ -39,7 +39,7 @@ public class MyHelper extends SQLiteOpenHelper {
 
     }
 
-    public long InsertData(String word, String meaning, SQLiteDatabase db){
+    public long InsertData(String word, String meaning, SQLiteDatabase db) {
         long id;
         ContentValues contentValues = new ContentValues();
         contentValues.put(Word, word);
@@ -48,15 +48,26 @@ public class MyHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public List<Word> GetAllWords(SQLiteDatabase db){
+    public List<Word> GetWordByName(String word, SQLiteDatabase db) {
         List<Word> dictionaryList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select * from tblWord ", null);
-        if (cursor.getCount()>0) {
+        Cursor cursor = db.rawQuery("select * from tblWord  where Word='" + word+ "'", null);
+        if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 dictionaryList.add(new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
             }
         }
         return dictionaryList;
-        }
     }
+
+    public List<Word> GetAllWords(SQLiteDatabase db) {
+        List<Word> dictionaryList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("select * from tblWord ", null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                dictionaryList.add(new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+            }
+        }
+        return dictionaryList;
+    }
+}
 
